@@ -104,6 +104,23 @@ def getLocalFrameMatrix(R_ij, t_ij):
     
     return T_ij
 	
+def forward_kinematics(Phi, L1, L2, L3, L4):
+    """Calculate the local-to-global frame matrices,
+    and the location of the end-effector.
+    Args:
+        Phi (4x1 nd.array):       Array containing the four joint angles
+        L1, L2, L3, L4 (float):   lengths of the parts of the robot arm.
+                                 e.g., Phi = np.array([0, -10, 20, 0])
+    Returns:
+
+    T_01, T_02, T_03, T_04:   4x4 nd.arrays of local-to-global matrices
+                              for each frame.
+      e:                      3x1 nd.array of 3-D coordinates, the
+                              location of the end-effector in space.
+    """
+    # Function implementation goes here
+
+    return T_01, T_02, T_03, T_04, e
 
 def main():
 
