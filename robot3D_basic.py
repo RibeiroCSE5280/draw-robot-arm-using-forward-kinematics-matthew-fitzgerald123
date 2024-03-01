@@ -130,28 +130,35 @@ def main():
 	# Lengths of arm parts 
 	L1 = 5   # Length of link 1
 	L2 = 8   # Length of link 2
-
+	L3 = 1.5
+	L4 = 3
 	# Joint angles 
 	phi1 = 30     # Rotation angle of part 1 in degrees
-	phi2 = -10    # Rotation angle of part 2 in degrees
-	phi3 = 0      # Rotation angle of the end-effector in degrees
-	
+	phi2 = -30    # Rotation angle of part 2 in degrees
+	phi3 = 10      # Rotation angle of the end-effector in degrees
+	phi4 = 0
+
+	phi_array = []
+	phi_array.append(phi1)
+	phi_array.append(phi2)
+	phi_array.append(phi3)
+	phi_array.append(phi4)
 	# frame 0
 
 	# Matrix of Frame 0 (written w.r.t. Frame 0, which is the previous frame) 
-	R_00 = RotationMatrix(50, axis_name = 'z')   # Rotation matrix
+	R_00 = RotationMatrix(phi4, axis_name = 'z')   # Rotation matrix
 	p0   = np.array([[3],[2], [0.0]])              # Frame's origin (w.r.t. previous frame)
 	t_00 = p0                                      # Translation vector
 	
 	T_00 = getLocalFrameMatrix(R_00, t_00)         # Matrix of Frame 1 w.r.t. Frame 0 (i.e., the world frame)
 	
 	# Create the coordinate frame mesh and transform
-	Frame0Arrows = createCoordinateFrameMesh()
+	#Frame0Arrows = createCoordinateFrameMesh()
 	
 	# Now, let's create a cylinder and add it to the local coordinate frame
 	link0_mesh = Cylinder(r=0.4, 
-	                      height=3, 
-	                      pos = (-2.3,0.1,0),
+	                      height=L4, 
+	                      pos = (-1.9,0.0,0),
 	                      c="orange", 
 	                      alpha=.8, 
 	                      axis=(1,0,0)
@@ -159,10 +166,10 @@ def main():
 	
 	# Also create a sphere to show as an example of a joint
 	r1 = 0.4
-	sphere0 = Sphere(r=r1/2).pos(-4,.1,0).color("grey").alpha(.8)
+	sphere0 = Sphere(r=r1/2).pos(-3.6,0,0).color("grey").alpha(.8)
 
 	# Combine all parts into a single object 
-	Frame0 = Frame0Arrows + link0_mesh + sphere0
+	Frame0 = sphere0 + link0_mesh #Frame0Arrows +
 
 	# Transform the part to position it at its correct location and orientation 
 	Frame0.apply_transform(T_00)  
@@ -190,7 +197,7 @@ def main():
 	# Now, let's create a cylinder and add it to the local coordinate frame
 	link1_mesh = Cylinder(r=0.4, 
 	                      height=L1, 
-	                      pos = (L1/2,0,0),
+	                      pos = (L1/2 + .4,0,0),
 	                      c="yellow", 
 	                      alpha=.8, 
 	                      axis=(1,0,0)
@@ -198,7 +205,7 @@ def main():
 	
 	# Also create a sphere to show as an example of a joint
 	r1 = 0.4
-	sphere1 = Sphere(r=r1).pos(-r1,0,0).color("gray").alpha(.8)
+	sphere1 = Sphere(r=r1).pos(0,0,0).color("gray").alpha(.8)
 
 	# Combine all parts into a single object 
 	Frame1 = Frame1Arrows + link1_mesh + sphere1
@@ -214,7 +221,7 @@ def main():
 	
 	# Matrix of Frame 2 (written w.r.t. Frame 1, which is the previous frame) 	
 	R_12 = RotationMatrix(phi2, axis_name = 'z')   # Rotation matrix
-	p2   = np.array([[L1],[0.0], [0.0]])           # Frame's origin (w.r.t. previous frame)
+	p2   = np.array([[L1 + .8],[0.0], [0.0]])           # Frame's origin (w.r.t. previous frame)
 	t_12 = p2                                      # Translation vector
 	
 	# Matrix of Frame 2 w.r.t. Frame 1 
@@ -229,14 +236,14 @@ def main():
 	# Now, let's create a cylinder and add it to the local coordinate frame
 	link2_mesh = Cylinder(r=0.4, 
 	                      height=L2, 
-	                      pos = (4.8,0,0),
+	                      pos = (4.3,0,0),
 	                      c="red", 
 	                      alpha=.8, 
 	                      axis=(1,0,0)
 	                      )
 	
 	r1 = 0.4
-	sphere2 = Sphere(r=r1).pos(r1,0,0).color("gray").alpha(.8)
+	sphere2 = Sphere(r=r1).pos(0,0,0).color("gray").alpha(.8)
 
 	# Combine all parts into a single object 
 	Frame2 = Frame2Arrows + sphere2 + link2_mesh 
@@ -249,8 +256,8 @@ def main():
 	
 	
 	# Matrix of Frame 3 (written w.r.t. Frame 2, which is the previous frame) 	
-	R_23 = RotationMatrix(-20, axis_name = 'z')   # Rotation matrix
-	p3   = np.array([[L2],[0.0], [0.0]])           # Frame's origin (w.r.t. previous frame)
+	R_23 = RotationMatrix(phi3, axis_name = 'z')   # Rotation matrix
+	p3   = np.array([[L2+ .6],[0.0], [0.0]])           # Frame's origin (w.r.t. previous frame)
 	t_23 = p3                                      # Translation vector
 	
 	# Matrix of Frame 3 w.r.t. Frame 2 
@@ -264,17 +271,17 @@ def main():
 	Frame3Arrows = createCoordinateFrameMesh()
 
 	base_mesh = Cylinder(r=0.6, 
-	                      height=1.5, 
-	                      pos = (2.2,0.4,0),
+	                      height=L3, 
+	                      pos = (1.1,0,0),
 	                      c="green", 
 	                      alpha=.8, 
 	                      axis=(1,0,0)
 	                      )
 
 	r1 = 0.4
-	sphere3 = Sphere(r=r1).pos(1.1,.4,0).color("gray").alpha(.8)
+	sphere3 = Sphere(r=r1).pos(0,0,0).color("gray").alpha(.8)
 
-	Frame3 = Frame3Arrows + base_mesh + sphere3 
+	Frame3 = Frame3Arrows + sphere3 + base_mesh 
 
 
 	# Transform the part to position it at its correct location and orientation 
